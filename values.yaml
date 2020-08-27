@@ -1,0 +1,52 @@
+global:
+  storageClass: local-storage
+
+elasticsearch:
+
+  volumePermissions:
+    enabled: true
+  master:
+    persistence:
+      size: 1Gi
+  data:
+    requests: {}
+    persistence:
+      size: 1Gi
+
+
+kibana:
+  volumePermissions:
+    enabled: true
+  elasticsearch:
+    hosts:
+    - "efk-elasticsearch-coordinating-only"
+    port: 9200
+  ingress:
+    enabled: true
+    hosts:
+      - name: kibana.serg.ru
+        path: /
+fluentd:
+  aggregator:
+    enabled: true
+    configMap: elasticsearch-output
+    extraEnv:
+    - name: ELASTICSEARCH_HOST
+      value: "efk-elasticsearch-coordinating-only"
+    - name: ELASTICSEARCH_PORT
+      value: "9200"
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+  forwarder:
+    resources:
+      limits:
+         cpu: 500m
+         memory: 1Gi
+    configMap: apache-log-parser
+    extraEnv:
+    - name: FLUENTD_DAEMON_USER
+      value: root
+    - name: FLUENTD_DAEMON_GROUP
+      value: root
