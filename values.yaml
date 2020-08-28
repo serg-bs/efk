@@ -6,13 +6,11 @@ elasticsearch:
   volumePermissions:
     enabled: true
   master:
-    persistence:
-      size: 1Gi
+    resources:
+      requests: {}
   data:
-    requests: {}
-    persistence:
-      size: 1Gi
-
+    resources:
+      requests: {}
 
 kibana:
   volumePermissions:
@@ -24,7 +22,7 @@ kibana:
   ingress:
     enabled: true
     hosts:
-      - name: kibana.serg.ru
+      - name: kibana.srvhub.tools
         path: /
 fluentd:
   aggregator:
@@ -40,6 +38,8 @@ fluentd:
         cpu: 500m
         memory: 1Gi
   forwarder:
+#    Чтение логов с диска /var/log/containers/* отключено
+    enabled: false
     resources:
       limits:
          cpu: 500m
