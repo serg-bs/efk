@@ -28,6 +28,8 @@ fluentd:
   aggregator:
     enabled: true
     configMap: elasticsearch-output
+    service:
+      type: NodePort
     extraEnv:
     - name: ELASTICSEARCH_HOST
       value: "efk-elasticsearch-coordinating-only"

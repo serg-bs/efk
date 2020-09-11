@@ -7,4 +7,4 @@
 ## Запуск
 1. ```kubectl create ns efk```
 2. ```helm dependeny update```
-3. ```helm upgrade --install efk -n efk```
+3. ```helm upgrade --install efk -n efk .```
