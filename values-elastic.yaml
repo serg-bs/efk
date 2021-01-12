@@ -1,0 +1,19 @@
+elasticsearch:
+  image:
+    repository: sergbs/elastic
+    tag: latest
+  volumePermissions:
+    enabled: true
+  master:
+    resources:
+      requests: {}
+  data:
+    resources:
+      requests: {}
+
+kibana:
+  enabled: false
+
+fluentd:
+  enabled: false
+
