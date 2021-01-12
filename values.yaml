@@ -1,8 +1,8 @@
-global:
-  storageClass: local-storage
-
 elasticsearch:
-  clusterDomain: srvhub.tools
+  image:
+    repository: sergbs/elastic
+    tag: latest
+  config:
   volumePermissions:
     enabled: true
   master:
@@ -13,20 +13,36 @@ elasticsearch:
       requests: {}
 
 kibana:
+  image:
+    repository: sergbs/kibana
+    tag: latest
+  extraConfiguration:
+    elasticsearch.username: "kibanaserver"
+    elasticsearch.password: "kibanaserver"
+    elasticsearch.ssl.verificationMode: certificate
+    elasticsearch.ssl.certificateAuthorities: "/opt/bitnami/kibana/certificates/root-ca.pem"
+    opendistro_security.auth.type: "basicauth"
+    opendistro_security.basicauth.forbidden_usernames: ["kibanaserver", "logstash"]
+    server.ssl.enabled: true
+    server.ssl.key: "/opt/bitnami/kibana/certificates/esnode-key.pem"
+    server.ssl.certificate: "/opt/bitnami/kibana/certificates/esnode.pem"
+    opendistro_security.accountinfo.enabled: true
   volumePermissions:
     enabled: true
   elasticsearch:
     hosts:
     - "efk-elasticsearch-coordinating-only"
     port: 9200
+    tls: true
   ingress:
     enabled: true
     hosts:
-      - name: kibana.srvhub.tools
+      - name: kibana.local
         path: /
 fluentd:
+  enabled: false
   aggregator:
-    enabled: true
+    enabled: false
     configMap: elasticsearch-output
     service:
       type: NodePort
