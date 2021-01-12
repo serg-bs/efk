@@ -1,0 +1,34 @@
+elasticsearch:
+  volumePermissions:
+    enabled: true
+
+kibana:
+  volumePermissions:
+    enabled: true
+  elasticsearch:
+    hosts:
+      - "efk-elasticsearch-coordinating-only"
+    port: 9200
+  ingress:
+    enabled: true
+    hosts:
+      - name: kibana.local
+        path: /
+fluentd:
+  aggregator:
+    enabled: true
+    configMap: elasticsearch-output
+    extraEnv:
+      - name: ELASTICSEARCH_HOST
+        value: "efk-elasticsearch-coordinating-only"
+      - name: ELASTICSEARCH_PORT
+        value: "9200"
+  forwarder:
+    #    Чтение логов с диска /var/log/containers/* отключено
+    enabled: false
+    configMap: apache-log-parser
+    extraEnv:
+      - name: FLUENTD_DAEMON_USER
+        value: root
+      - name: FLUENTD_DAEMON_GROUP
+        value: root
