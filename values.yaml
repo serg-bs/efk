@@ -1,8 +1,9 @@
 elasticsearch:
+  curator:
+    enabled: true
   image:
     repository: sergbs/elastic
     tag: latest
-  config:
   volumePermissions:
     enabled: true
   master:
