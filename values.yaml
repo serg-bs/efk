@@ -6,12 +6,6 @@ elasticsearch:
     tag: latest
   volumePermissions:
     enabled: true
-  master:
-    resources:
-      requests: {}
-  data:
-    resources:
-      requests: {}
 
 kibana:
   image:
@@ -41,28 +35,16 @@ kibana:
       - name: kibana.local
         path: /
 fluentd:
-  enabled: false
   aggregator:
-    enabled: false
+    enabled: true
     configMap: elasticsearch-output
-    service:
-      type: NodePort
     extraEnv:
     - name: ELASTICSEARCH_HOST
       value: "efk-elasticsearch-coordinating-only"
     - name: ELASTICSEARCH_PORT
       value: "9200"
-    resources:
-      limits:
-        cpu: 500m
-        memory: 1Gi
   forwarder:
-#    Чтение логов с диска /var/log/containers/* отключено
-    enabled: false
-    resources:
-      limits:
-         cpu: 500m
-         memory: 1Gi
+    enabled: true
     configMap: apache-log-parser
     extraEnv:
     - name: FLUENTD_DAEMON_USER
