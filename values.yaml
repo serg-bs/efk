@@ -7,6 +7,26 @@ elasticsearch:
   volumePermissions:
     enabled: true
 
+  extraVolumes:
+  - name: config
+    secret:
+      secretName: opendistro-config
+      items:
+        - key: config.yml
+          path: config.yml
+  - name: roles-mapping
+    secret:
+      secretName: opendistro-config
+      items:
+        - key: roles_mapping.yml
+          path: roles_mapping.yml
+  extraVolumeMounts:
+    - mountPath: /opt/bitnami/elasticsearch/plugins/opendistro_security/securityconfig/config.yml
+      subPath: config.yml
+      name: config
+    - mountPath: /opt/bitnami/elasticsearch/plugins/opendistro_security/securityconfig/roles_mapping.yml
+      subPath: roles_mapping.yml
+      name: roles-mapping
 kibana:
   image:
     repository: sergbs/kibana
