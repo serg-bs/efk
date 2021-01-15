@@ -35,7 +35,11 @@ data:
       include_tag_key true
       host "#{ENV['ELASTICSEARCH_HOST']}"
       port "#{ENV['ELASTICSEARCH_PORT']}"
+      user admin
+      password admin
+      # hosts http://efk-elasticsearch-coordinating-only:9200
       logstash_format true
+      # logstash_prefix logstash
       <buffer>
         @type file
         path /opt/bitnami/fluentd/logs/buffers/logs.buffer
