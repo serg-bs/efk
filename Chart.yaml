@@ -10,7 +10,7 @@ dependencies:
     tags:
       - elasticsearch
   - name: kibana
-    version: 6.2.4
+    version: 7.1.0
     repository: https://charts.bitnami.com/bitnami/
     condition: kibana.enabled
     tags:
