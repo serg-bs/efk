@@ -1,6 +1,15 @@
 elasticsearch:
   curator:
     enabled: true
+    configMaps:
+      config_yml: |-
+        ---
+        client:
+          hosts:
+            - {{ template "elasticsearch.coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+          port: {{ .Values.coordinating.service.port }}
+          username: admin
+          password: admin
   image:
     repository: sergbs/elastic
     tag: 1
