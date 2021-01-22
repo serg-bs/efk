@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+    name: opendistro-config-reload
+    labels:
+        app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+        app.kubernetes.io/instance: {{.Release.Name | quote }}
+        helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    annotations:
+        "helm.sh/hook": post-upgrade
+        "helm.sh/hook-weight": "1"
+        "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+    template:
+        metadata:
+            name: {{ .Release.Name }}-config-reload
+            labels:
+                app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+                app.kubernetes.io/instance: {{.Release.Name | quote }}
+                helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+        spec:
+            initContainers:
+                - name: "wait-for-db"
+                  image: "alpine:3.6"
+                  command:
+                      - 'sh'
+                      - '-c'
+                      - >
+                          until nc -z -w 2 efk-elasticsearch-coordinating-only 9300 && echo elastic is ok; do
+                            sleep 2;
+                          done;
+            containers:
+                - name: opendistro-config-reload
+                  image: "{{ .Values.elasticsearch.image.registry }}/{{ .Values.elasticsearch.image.repository}}:{{ .Values.elasticsearch.image.tag }}"
+                  imagePullPolicy: {{ .Values.elasticsearch.image.pullPolicy | quote }}
+                {{- if .Values.elasticsearch.master.securityContext.enabled }}
+                  securityContext:
+                    runAsUser: {{ .Values.elasticsearch.master.securityContext.runAsUser }}
+                 {{- end }}
+                  command:
+                    - 'bash'
+                    - '-c'
+                    - >
+                       "/opt/bitnami/elasticsearch/plugins/opendistro_security/tools/securityadmin.sh" -h efk-elasticsearch-coordinating-only -cd "/opt/bitnami/elasticsearch/plugins/opendistro_security/securityconfig" -icl -key "/opt/bitnami/elasticsearch/config/kirk-key.pem" -cert "/opt/bitnami/elasticsearch/config/kirk.pem" -cacert "/opt/bitnami/elasticsearch/config/root-ca.pem" -nhnv
+            imagePullSecrets:
+                - name: {{ .Values.global.imagepullsecrets}}
+            restartPolicy: Never
+    backoffLimit: 1

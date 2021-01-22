@@ -11,6 +11,7 @@ elasticsearch:
           username: admin
           password: admin
   image:
+    registry: docker.io
     repository: sergbs/elastic
     tag: 1
   volumePermissions:
