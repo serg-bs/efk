@@ -44,6 +44,7 @@ kibana:
   extraConfiguration:
     elasticsearch.username: "kibanaserver"
     elasticsearch.password: "kibanaserver"
+##  Uncomment if elastic Rest layer enabled
 #    elasticsearch.ssl.verificationMode: certificate
 #    elasticsearch.ssl.certificateAuthorities: "/opt/bitnami/kibana/certificates/root-ca.pem"
     opendistro_security.auth.type: "basicauth"
@@ -55,14 +56,14 @@ kibana:
     hosts:
     - "efk-elasticsearch-coordinating-only"
     port: 9200
+##  Uncomment if elastic Rest layer enabled
 #    tls: true
-
-
   ingress:
     enabled: true
-    hosts:
-      - name: kibana.local
-        path: /
+    hostname: kibana.local
+  service:
+    type: NodePort
+    port: 30010
 fluentd:
   aggregator:
     enabled: true
