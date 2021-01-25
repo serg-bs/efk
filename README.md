@@ -4,7 +4,7 @@
 
 ## Запуск
 1. ```kubectl create ns efk```
-2. ```helm dependeny update```
+2. ```helm dependency update .```
 3. ```helm upgrade --install efk -n efk .```
 
 Проверка работоспособности еластика, зайти внутрь пода, выполнить 
