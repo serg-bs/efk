@@ -42,7 +42,5 @@ spec:
                     - '-c'
                     - >
                        "/opt/bitnami/elasticsearch/plugins/opendistro_security/tools/securityadmin.sh" -h efk-elasticsearch-coordinating-only -cd "/opt/bitnami/elasticsearch/plugins/opendistro_security/securityconfig" -icl -key "/opt/bitnami/elasticsearch/config/kirk-key.pem" -cert "/opt/bitnami/elasticsearch/config/kirk.pem" -cacert "/opt/bitnami/elasticsearch/config/root-ca.pem" -nhnv
-            imagePullSecrets:
-                - name: {{ .Values.global.imagepullsecrets}}
             restartPolicy: Never
     backoffLimit: 1
