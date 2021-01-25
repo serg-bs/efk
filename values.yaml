@@ -30,6 +30,12 @@ elasticsearch:
       items:
         - key: roles_mapping.yml
           path: roles_mapping.yml
+  - name: internal-users
+    secret:
+      secretName: opendistro-config
+      items:
+        - key: internal_users.yml
+          path: internal_users.yml
   extraVolumeMounts:
     - mountPath: /opt/bitnami/elasticsearch/plugins/opendistro_security/securityconfig/config.yml
       subPath: config.yml
@@ -37,6 +43,9 @@ elasticsearch:
     - mountPath: /opt/bitnami/elasticsearch/plugins/opendistro_security/securityconfig/roles_mapping.yml
       subPath: roles_mapping.yml
       name: roles-mapping
+    - mountPath: /opt/bitnami/elasticsearch/plugins/opendistro_security/securityconfig/internal_users.yml
+      subPath: internal_users.yml
+      name: internal-users
 kibana:
   image:
     repository: sergbs/kibana
