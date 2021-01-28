@@ -8,8 +8,7 @@ elasticsearch:
           hosts:
             - {{ template "elasticsearch.coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
           port: {{ .Values.coordinating.service.port }}
-          username: admin
-          password: admin
+          http_auth: admin:admin
   image:
     registry: docker.io
     repository: sergbs/elastic
